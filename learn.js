@@ -39,7 +39,7 @@ function setup() {
   imgArray[4].src = 'imgs/warrior2.svg';
   imgArray[5] = new Image();
   imgArray[5].src = 'imgs/chair.svg';
-  
+
   poseCounter = 0;
   targetLabel = 1;
   target = posesArray[poseCounter];
@@ -49,14 +49,14 @@ function setup() {
   errorCounter = 0;
   iterationCounter = 0;
   document.getElementById("poseImg").src = imgArray[poseCounter].src;
-  
+
   let options = {
     inputs: 34,
     outputs: 6,
     task: 'classification',
     debug: true
   }
-  
+
   yogi = ml5.neuralNetwork(options);
   const modelInfo = {
     model: 'modelv2/model2.json',
@@ -65,13 +65,13 @@ function setup() {
   };
   yogi.load(modelInfo, yogiLoaded);
 }
-  
-function yogiLoaded(){
+
+function yogiLoaded() {
   console.log("Model ready!");
   classifyPose();
 }
 
-function classifyPose(){
+function classifyPose() {
   if (pose) {
     let inputs = [];
     for (let i = 0; i < pose.keypoints.length; i++) {
@@ -92,44 +92,52 @@ function gotResult(error, results) {
   document.getElementById("sparkles").style.display = "none";
   if (results[0].confidence > 0.70) {
     console.log("Confidence");
-    if (results[0].label == targetLabel.toString()){
+    if (results[0].label == targetLabel.toString()) {
       console.log(targetLabel);
       iterationCounter = iterationCounter + 1;
 
       console.log(iterationCounter)
-      
+
       if (iterationCounter == 10) {
         console.log("30!")
         iterationCounter = 0;
-        nextPose();}
-      else{
+        nextPose();
+      }
+      else {
         console.log("doin this")
         timeLeft = timeLeft - 1;
-        if (timeLeft < 10){
+        if (timeLeft < 10) {
           document.getElementById("time").textContent = "00:0" + timeLeft;
-        }else{
-        document.getElementById("time").textContent = "00:" + timeLeft;}
-        setTimeout(classifyPose, 1000);}}
-    else{
+        } else {
+          document.getElementById("time").textContent = "00:" + timeLeft;
+        }
+        setTimeout(classifyPose, 1000);
+      }
+    }
+    else {
       errorCounter = errorCounter + 1;
       console.log("error");
-      if (errorCounter >= 4){
+      if (errorCounter >= 4) {
         console.log("four errors");
         iterationCounter = 0;
         timeLeft = 10;
-        if (timeLeft < 10){
+        if (timeLeft < 10) {
           document.getElementById("time").textContent = "00:0" + timeLeft;
-        }else{
-        document.getElementById("time").textContent = "00:" + timeLeft;}
+        } else {
+          document.getElementById("time").textContent = "00:" + timeLeft;
+        }
         errorCounter = 0;
         setTimeout(classifyPose, 100);
-      }else{
+      } else {
         setTimeout(classifyPose, 100);
-      }}}
-  else{
+      }
+    }
+  }
+  else {
     console.log("whatwe really dont want")
     setTimeout(classifyPose, 100);
-}}
+  }
+}
 
 
 function gotPoses(poses) {
@@ -147,9 +155,9 @@ function modelLoaded() {
 function draw() {
   push();
   translate(video.width, 0);
-  scale(-1,1);
+  scale(-1, 1);
   image(video, 0, 0, video.width, video.height);
-  
+
   if (pose) {
     for (let i = 0; i < skeleton.length; i++) {
       let a = skeleton[i][0];
@@ -162,13 +170,13 @@ function draw() {
   pop();
 }
 
-function nextPose(){
+function nextPose() {
   if (poseCounter >= 5) {
     console.log("Well done, you have learnt all poses!");
     document.getElementById("finish").textContent = "Amazing!";
     document.getElementById("welldone").textContent = "All poses done.";
     document.getElementById("sparkles").style.display = 'block';
-  }else{
+  } else {
     console.log("Well done, you all poses!");
     //var stars = document.getElementById("starsid");
     //stars.classList.add("stars.animated");
@@ -185,5 +193,6 @@ function nextPose(){
     console.log("classifying again");
     timeLeft = 10;
     document.getElementById("time").textContent = "00:" + timeLeft;
-    setTimeout(classifyPose, 4000)}
+    setTimeout(classifyPose, 4000)
+  }
 }
