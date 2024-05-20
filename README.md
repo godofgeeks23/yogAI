@@ -1,2 +1,4 @@
 
-## Hey there! Welcome to yogAI
+## Hey there! Welcome to YogAI
+
+Your virtual Yoga instructor!
