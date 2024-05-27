@@ -1,7 +1,4 @@
-let video;
-let poseNet;
-let pose;
-let skeleton;
+let video, poseNet, pose, skeleton;
 let posesArray = ['Mountain', 'Tree', 'Downward Dog', 'Warrior I', 'Warrior II', 'Chair'];
 
 var poseImage;
